@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
     private Rigidbody playerRb;
+    private Animator amim;
 
     public float jumpForce;
     public float gravityModifier;
@@ -15,16 +16,19 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
+        amim = GetComponent<Animator>();
+        Physics.gravity *= gravityModifier;
         //playerRb.AddForce(Vector3.up * 1000);//게임이 시작할 때 플레이어가 하늘로 날아감
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)&& isOnGround)
+        if (Input.GetKeyDown(KeyCode.Space)&& isOnGround&&!gameOver)
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);//스페이스바를 누르면 하늘로 날아감.
             isOnGround = false;//땅이랑은 닿고 있지 않다고 판단,
+            amim.SetTrigger("Jump_trig");
         }
     }
 
@@ -38,6 +42,8 @@ public class PlayerController : MonoBehaviour
         {
             gameOver = true; //장애물에 닿으면 게임 오버
             Debug.Log("GAME OVER!");
+            amim.SetBool("Death_b", true);
+            amim.SetInteger("DeathType_int", 1);
         }
     }
 }
