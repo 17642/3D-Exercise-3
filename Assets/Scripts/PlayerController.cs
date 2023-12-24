@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float gravityModifier;
 
     public bool isOnGround = true;
+    public bool gameOver = false;
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
@@ -29,6 +30,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        isOnGround = true; // 무언가랑 닿고 있으면 Ground에 닿고 있는 것으로 판단한다.
+        if (collision.transform.CompareTag("Ground"))
+        {
+            isOnGround = true; // Ground와 닿으면 isOnGround = true
+        }
+        if (collision.transform.CompareTag("Obstacle"))
+        {
+            gameOver = true; //장애물에 닿으면 게임 오버
+            Debug.Log("GAME OVER!");
+        }
     }
 }
